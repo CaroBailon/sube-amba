@@ -1,0 +1,141 @@
+fecha,nombre,tipo
+2020-01-01,Año Nuevo,feriado
+2020-02-24,Carnaval,feriado
+2020-02-25,Carnaval,feriado
+2020-03-23,Día no laborable con fines turísticos,puente
+2020-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado
+2020-03-31,Día del Veterano y de los Caídos en Malvinas (trasladado del 2/4),feriado
+2020-04-09,Jueves Santo,no_laborable
+2020-04-10,Viernes Santo,feriado
+2020-05-01,Día del Trabajador,feriado
+2020-05-25,Día de la Revolución de Mayo,feriado
+2020-06-15,Paso a la Inmortalidad del Gral. Güemes,feriado
+2020-06-20,Paso a la Inmortalidad del Gral. Belgrano,feriado
+2020-07-09,Día de la Independencia,feriado
+2020-07-10,Día no laborable con fines turísticos,puente
+2020-08-17,Paso a la Inmortalidad del Gral. San Martín,feriado
+2020-10-12,Día del Respeto a la Diversidad Cultural,feriado
+2020-11-23,Día de la Soberanía Nacional,feriado
+2020-12-07,Día no laborable con fines turísticos,puente
+2020-12-08,Inmaculada Concepción de María,feriado
+2020-12-25,Navidad,feriado
+2021-01-01,Año Nuevo,feriado
+2021-02-15,Carnaval,feriado
+2021-02-16,Carnaval,feriado
+2021-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado
+2021-04-01,Jueves Santo,no_laborable
+2021-04-02,Viernes Santo / Día del Veterano y de los Caídos en Malvinas,feriado
+2021-05-24,Día no laborable con fines turísticos,puente
+2021-05-25,Día de la Revolución de Mayo,feriado
+2021-06-20,Paso a la Inmortalidad del Gral. Belgrano,feriado
+2021-06-21,Paso a la Inmortalidad del Gral. Güemes,feriado
+2021-07-09,Día de la Independencia,feriado
+2021-08-16,Paso a la Inmortalidad del Gral. San Martín,feriado
+2021-10-08,Día no laborable con fines turísticos,puente
+2021-10-11,Día del Respeto a la Diversidad Cultural,feriado
+2021-11-20,Día de la Soberanía Nacional,feriado
+2021-11-22,Día no laborable con fines turísticos,puente
+2021-12-08,Inmaculada Concepción de María,feriado
+2021-12-25,Navidad,feriado
+2022-01-01,Año Nuevo,feriado
+2022-02-28,Carnaval,feriado
+2022-03-01,Carnaval,feriado
+2022-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado
+2022-04-02,Día del Veterano y de los Caídos en Malvinas,feriado
+2022-04-14,Jueves Santo,no_laborable
+2022-04-15,Viernes Santo,feriado
+2022-05-01,Día del Trabajador,feriado
+2022-05-18,Censo Nacional 2022,extraordinario
+2022-05-25,Día de la Revolución de Mayo,feriado
+2022-06-17,Paso a la Inmortalidad del Gral. Güemes,feriado
+2022-06-20,Paso a la Inmortalidad del Gral. Belgrano,feriado
+2022-07-09,Día de la Independencia,feriado
+2022-08-15,Paso a la Inmortalidad del Gral. San Martín,feriado
+2022-09-02,Feriado nacional por el atentado a la Vicepresidenta (DNU 573/2022),extraordinario
+2022-10-07,Día no laborable con fines turísticos,puente
+2022-10-10,Día del Respeto a la Diversidad Cultural,feriado
+2022-11-20,Día de la Soberanía Nacional,feriado
+2022-11-21,Día no laborable con fines turísticos,puente
+2022-12-08,Inmaculada Concepción de María,feriado
+2022-12-09,Día no laborable con fines turísticos,puente
+2022-12-20,Festejos por la Copa del Mundo,extraordinario
+2022-12-25,Navidad,feriado
+2023-01-01,Año Nuevo,feriado
+2023-02-20,Carnaval,feriado
+2023-02-21,Carnaval,feriado
+2023-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado
+2023-04-02,Día del Veterano y de los Caídos en Malvinas,feriado
+2023-04-06,Jueves Santo,no_laborable
+2023-04-07,Viernes Santo,feriado
+2023-05-01,Día del Trabajador,feriado
+2023-05-25,Día de la Revolución de Mayo,feriado
+2023-05-26,Día no laborable con fines turísticos,puente
+2023-06-17,Paso a la Inmortalidad del Gral. Güemes,feriado
+2023-06-19,Día no laborable con fines turísticos,puente
+2023-06-20,Paso a la Inmortalidad del Gral. Belgrano,feriado
+2023-07-09,Día de la Independencia,feriado
+2023-08-21,Paso a la Inmortalidad del Gral. San Martín,feriado
+2023-10-13,Día no laborable con fines turísticos,puente
+2023-10-16,Día del Respeto a la Diversidad Cultural,feriado
+2023-11-20,Día de la Soberanía Nacional,feriado
+2023-12-08,Inmaculada Concepción de María,feriado
+2023-12-25,Navidad,feriado
+2024-01-01,Año Nuevo,feriado
+2024-02-12,Carnaval,feriado
+2024-02-13,Carnaval,feriado
+2024-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado
+2024-03-28,Jueves Santo,no_laborable
+2024-03-29,Viernes Santo,feriado
+2024-04-01,Día no laborable con fines turísticos,puente
+2024-04-02,Día del Veterano y de los Caídos en Malvinas,feriado
+2024-05-01,Día del Trabajador,feriado
+2024-05-25,Día de la Revolución de Mayo,feriado
+2024-06-17,Paso a la Inmortalidad del Gral. Güemes,feriado
+2024-06-20,Paso a la Inmortalidad del Gral. Belgrano,feriado
+2024-06-21,Día no laborable con fines turísticos,puente
+2024-07-09,Día de la Independencia,feriado
+2024-08-17,Paso a la Inmortalidad del Gral. San Martín,feriado
+2024-10-11,Día no laborable con fines turísticos,puente
+2024-10-12,Día del Respeto a la Diversidad Cultural,feriado
+2024-11-18,Día de la Soberanía Nacional,feriado
+2024-12-08,Inmaculada Concepción de María,feriado
+2024-12-25,Navidad,feriado
+2025-01-01,Año Nuevo,feriado
+2025-03-03,Carnaval,feriado
+2025-03-04,Carnaval,feriado
+2025-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado
+2025-04-02,Día del Veterano y de los Caídos en Malvinas,feriado
+2025-04-17,Jueves Santo,no_laborable
+2025-04-18,Viernes Santo,feriado
+2025-05-01,Día del Trabajador,feriado
+2025-05-02,Día no laborable con fines turísticos,puente
+2025-05-25,Día de la Revolución de Mayo,feriado
+2025-06-16,Paso a la Inmortalidad del Gral. Güemes,feriado
+2025-06-20,Paso a la Inmortalidad del Gral. Belgrano,feriado
+2025-07-09,Día de la Independencia,feriado
+2025-08-15,Día no laborable con fines turísticos,puente
+2025-08-17,Paso a la Inmortalidad del Gral. San Martín,feriado
+2025-10-10,Día del Respeto a la Diversidad Cultural,feriado
+2025-11-21,Día no laborable con fines turísticos,puente
+2025-11-24,Día de la Soberanía Nacional,feriado
+2025-12-08,Inmaculada Concepción de María,feriado
+2025-12-25,Navidad,feriado
+2026-01-01,Año Nuevo,feriado
+2026-02-16,Carnaval,feriado
+2026-02-17,Carnaval,feriado
+2026-03-23,Día no laborable con fines turísticos,puente
+2026-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado
+2026-04-02,Día del Veterano y de los Caídos en Malvinas / Jueves Santo,feriado
+2026-04-03,Viernes Santo,feriado
+2026-05-01,Día del Trabajador,feriado
+2026-05-25,Día de la Revolución de Mayo,feriado
+2026-06-15,Paso a la Inmortalidad del Gral. Güemes,feriado
+2026-06-20,Paso a la Inmortalidad del Gral. Belgrano,feriado
+2026-07-09,Día de la Independencia,feriado
+2026-07-10,Día no laborable con fines turísticos,puente
+2026-08-17,Paso a la Inmortalidad del Gral. San Martín,feriado
+2026-10-12,Día del Respeto a la Diversidad Cultural,feriado
+2026-11-23,Día de la Soberanía Nacional,feriado
+2026-12-07,Día no laborable con fines turísticos,puente
+2026-12-08,Inmaculada Concepción de María,feriado
+2026-12-25,Navidad,feriado
