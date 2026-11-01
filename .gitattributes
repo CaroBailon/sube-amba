@@ -1,1 +1,2 @@
 *.bat linguist-vendored
+*.sql linguist-detectable
