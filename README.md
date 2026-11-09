@@ -41,6 +41,8 @@ El detalle de cada decisión de limpieza está en [docs/decisiones_de_limpieza.m
 
 Archivo: [`dashboard/sube_amba.pbix`](dashboard/sube_amba.pbix) · Versión en PDF: [`docs/sube_amba.pdf`](docs/sube_amba.pdf)
 
+**También en Excel:** [`dashboard/sube_amba.xlsx`](dashboard/sube_amba.xlsx) reproduce los hallazgos principales con fórmulas (`SUMIFS`, `COUNTIFS`, `INDEX`/`MATCH`, `MINIFS`), una tabla dinámica por año y modo, la evolución mensual del subte con su variación interanual y gráfico, y los días atípicos.
+
 | Página | Qué muestra |
 | --- | --- |
 | **Resumen** | Indicadores por año, evolución mensual desde 2020 y reparto entre colectivo, tren y subte |
@@ -109,6 +111,7 @@ sube-amba/
 │   └── 06_exportar_powerbi.sql
 ├── dashboard/
 │   ├── sube_amba.pbix
+│   ├── sube_amba.xlsx           ← el análisis en Excel (fórmulas + tabla dinámica)
 │   ├── 01_resumen.png, 02_subte.png, 03_dias_atipicos.png
 │   └── datos/                   ← CSV que usa Power BI (solo AMBA)
 ├── docs/
