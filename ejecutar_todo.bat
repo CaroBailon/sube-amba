@@ -34,7 +34,8 @@ exit /b 0
 
 :error
 echo.
-echo Hubo un error en el paso anterior. Copia el mensaje y pasamelo.
+echo Hubo un error en el paso anterior. Revisa el mensaje de arriba: indica el script y la linea.
+echo Lo mas comun: falta alguno de los 7 CSV en data\raw\ o tiene otro nombre.
 set PGPASSWORD=
 pause
 exit /b 1

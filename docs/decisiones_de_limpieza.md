@@ -1,6 +1,6 @@
 # Decisiones de limpieza
 
-Este documento explica qué encontré al explorar los datos y qué hice con cada problema. Es lo que más te van a preguntar en una entrevista técnica: no *qué* limpiaste, sino *por qué*.
+Este documento explica qué encontré al explorar los datos, qué hice con cada problema y por qué. Cada decisión cambia los números del análisis, así que quedan registradas para poder revisarlas o revertirlas.
 
 ## Fuente
 

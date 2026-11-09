@@ -17,7 +17,7 @@ Tiempo estimado: 30–40 minutos la primera vez.
 
 ## 3. Armar la carpeta del proyecto
 
-1. Descomprimí el zip en una carpeta sin tildes ni espacios raros, por ejemplo `C:\proyectos\sube-amba`.
+1. Cloná el repositorio (`git clone https://github.com/CaroBailon/sube-amba.git`) o descargalo como zip desde GitHub, en una carpeta sin tildes ni espacios, por ejemplo `C:\proyectos\sube-amba`.
 2. Copiá los 7 CSV (`dat-ab-usos-2020.csv` … `dat-ab-usos-2026.csv`) dentro de `data\raw\`.
 
 ## 4. Ejecutar el pipeline
@@ -26,7 +26,7 @@ Doble clic en **`ejecutar_todo.bat`**. Te pide la contraseña de `postgres` una 
 
 Al final tenés que ver la tabla de controles con **OK en las 6 filas**.
 
-Si algo falla, copiá el mensaje de error y pasámelo.
+Si algo falla, el mensaje indica en qué script y en qué línea se cortó. El error más común es que falte alguno de los 7 CSV en `data\raw\` o que tenga otro nombre.
 
 ## 5. Conectar Power BI
 

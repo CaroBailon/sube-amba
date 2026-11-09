@@ -1,6 +1,6 @@
 # ¿Cómo se mueve el AMBA? 19.000 millones de viajes con SUBE (2020–2026)
 
-**El AMBA viaja un 22% menos que en 2023, y el subte perdió la mitad de sus pasajeros de día hábil en dos años, después del aumento de tarifa de mayo de 2024.**
+**El AMBA viaja un 22% menos que en 2023, y el subte perdió el 45% de sus pasajeros de día hábil en dos años, después del aumento de tarifa de mayo de 2024.**
 
 Análisis de los registros diarios de SUBE del Ministerio de Transporte, de punta a punta: carga y limpieza en PostgreSQL, modelo en estrella, preguntas de negocio en SQL y dashboard en Power BI.
 
@@ -11,14 +11,35 @@ Análisis de los registros diarios de SUBE del Ministerio de Transporte, de punt
 | # | Hallazgo | Dato |
 | --- | --- | --- |
 | 1 | **La demanda tocó su máximo en 2023 y cae desde entonces.** | 11,7 millones de viajes por día hábil en 2023 → 9,1 millones en 2026 (-22%). |
-| 2 | **El subte perdió la mitad de sus pasajeros.** La caída arranca con el aumento del 17/05/2024 ($125 → $574, +359%) y se profundiza durante un año. | 915.000 viajes por día hábil en oct-2023 → 500.000 en oct-2025. Peor mes: abr-2025 (-40% interanual). |
+| 2 | **El subte perdió el 45% de sus pasajeros.** La caída arranca con el aumento del 17/05/2024 ($125 → $574, +359%) y se profundiza durante un año. | 915.000 viajes por día hábil en oct-2023 → 500.000 en oct-2025. Peor mes: abr-2025 (-40% interanual). |
 | 3 | **El colectivo sostiene la red.** | 85% de los viajes. El subte bajó del 6,8% (2023) al 4,7% (2025). |
-| 4 | **Un feriado se comporta como un domingo, pero un "puente" no.** | Feriado -65% y domingo -68% vs. día hábil; día no laborable con fines turísticos, -47%. **Recomendación:** programar los puentes con frecuencia de sábado, no de domingo. |
+| 4 | **Un feriado se comporta como un domingo, pero un "puente" no.** | Feriado -65% y domingo -68% vs. día hábil; día no laborable con fines turísticos, -47%. |
 | 5 | **Lo que define el impacto de un paro es si paran los colectivos.** | Paro general con colectivos (9/5/2024): -95% de viajes. Sin colectivos (10/4/2025): -47%. Una tormenta fuerte resta entre 35% y 38%. |
 
 **Hallazgo de calidad de datos:** el 10/12/2021 aparece como una caída del 40%, pero no lo es. Ese día el transporte fue gratuito desde el mediodía por el acto del Día de la Democracia, y esos viajes no quedaron registrados. El subte, que no fue gratuito, subió un 9%. **SUBE mide viajes pagos, no viajes totales.**
 
+## Recomendaciones
+
+1. **Programar los días "puente" con frecuencia de sábado, no de domingo.** En un puente viaja un 47% menos que en un día hábil, pero en un feriado un 65% menos: muchas personas igual trabajan. Una frecuencia de domingo deja sin servicio a buena parte de esa demanda.
+2. **Centrar los planes de contingencia ante paros en el colectivo.** Cuando paran los colectivos se pierde entre el 73% y el 95% de los viajes; cuando paran solo trenes y subte, alrededor del 47%. Los refuerzos y la comunicación a usuarios rinden más si se activan según adhiera o no la UTA.
+3. **Antes de un nuevo aumento del subte, averiguar a dónde fueron sus pasajeros.** Tras el aumento de 2024 el subte perdió el 45% de sus viajes de día hábil y en 2026 todavía no se recupera. Estos datos no permiten saber si esas personas se pasaron al colectivo o dejaron de viajar: hace falta una encuesta origen-destino o datos de combinaciones.
+4. **Fiscalizar con muestras amplias, no solo en las líneas grandes.** Hacen falta 183 de 391 líneas para llegar al 80% de los viajes: la demanda está repartida y controlar solo las 10 líneas más grandes cubre apenas el 12%.
+5. **Marcar en el dataset público los días de transporte gratuito.** Hoy aparecen como caídas de demanda (10/12/2021: -40%) y cualquier análisis automático los lee como anomalías.
+
+## Limitaciones
+
+- **Usos no son personas.** Una persona que combina colectivo y tren cuenta dos veces; el dataset no permite contar pasajeros únicos.
+- **SUBE registra viajes pagos.** Los viajes gratuitos o sin validar no aparecen.
+- **La relación entre tarifa y caída del subte es temporal, no causal.** La caída coincide con el aumento y sigue sus fechas tramo por tramo, pero en el mismo período hubo otros cambios (poder adquisitivo, actividad económica, aumentos en otros modos) que también pueden influir. No hay un grupo de control para aislar el efecto de la tarifa.
+- **2026 está incompleto (hasta el 30/10) y tiene datos preliminares** desde febrero, que pueden corregirse. Por eso los años se comparan con promedios diarios.
+- **El municipio falta en el 60% de los registros.** No se puede hacer un análisis confiable por municipio con este dataset.
+- **Algunas líneas se informan agrupadas** (por ejemplo, la 501G de Moreno), lo que exagera su tamaño en el ranking.
+
+El detalle de cada decisión de limpieza está en [docs/decisiones_de_limpieza.md](docs/decisiones_de_limpieza.md).
+
 ## Dashboard
+
+Archivo: [`dashboard/sube_amba.pbix`](dashboard/sube_amba.pbix) · Versión en PDF: [`docs/sube_amba.pdf`](docs/sube_amba.pdf)
 
 | Página | Qué muestra |
 | --- | --- |
@@ -92,7 +113,8 @@ sube-amba/
 │   └── datos/                   ← CSV que usa Power BI (solo AMBA)
 ├── docs/
 │   ├── decisiones_de_limpieza.md
-│   └── instalacion_windows.md
+│   ├── instalacion_windows.md
+│   └── sube_amba.pdf            ← el dashboard exportado a PDF
 └── ejecutar_todo.bat
 ```
 

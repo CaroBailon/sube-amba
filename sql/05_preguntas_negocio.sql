@@ -1,9 +1,10 @@
 -- =====================================================================
--- 05_preguntas_negocio.sql  ←  ESTE ES TU ARCHIVO, Carolina
+-- 05_preguntas_negocio.sql
+-- Siete preguntas de negocio sobre la movilidad en el AMBA.
 --
--- Cada pregunta tiene: qué se quiere saber, por qué le importa a alguien,
--- qué técnica SQL practica y una pista. Escribí tu consulta debajo,
--- correla en DBeaver y anotá el resultado en el comentario "Hallazgo".
+-- Cada bloque tiene: la pregunta, a quién le sirve la respuesta, la
+-- técnica SQL usada, el enfoque, la consulta y debajo el resultado con
+-- su hallazgo. Las consultas corren sobre el modelo en estrella (dw).
 --
 -- Tablas disponibles (esquema dw):
 --   fact_usos   (fecha, linea_key, empresa_key, jurisdiccion, cantidad, dato_preliminar)
@@ -14,8 +15,8 @@
 --                primer_dia, ultimo_dia)
 --   dim_empresa (empresa_key, empresa)
 --
--- Regla de oro: 2026 llega hasta el 30/10. Para comparar años usá
--- PROMEDIOS DIARIOS, no totales.
+-- Criterio general: 2026 llega hasta el 30/10, así que los años se
+-- comparan con PROMEDIOS DIARIOS, no con totales.
 -- =====================================================================
 
 
@@ -23,11 +24,10 @@
 -- P1. ¿Volvió el AMBA a viajar como antes de la pandemia?
 -- Para quién: planificación de transporte (¿cuánta oferta hace falta?).
 -- Técnica: JOIN + GROUP BY + agregación.
--- Pista: promedio de usos por DÍA HÁBIL en el AMBA, por año.
---   1) Primero sumá usos por fecha (subconsulta o CTE), filtrando es_amba y tipo_dia = 'Hábil'.
---   2) Después promediá esas sumas diarias por año.
---   Ojo: si hacés AVG(cantidad) directo sobre fact_usos, promediás filas
---   (línea-día), no días. Es el error más común: pensá por qué da distinto.
+-- Enfoque: promedio de usos por DÍA HÁBIL en el AMBA, por año, en dos pasos:
+--   1) sumar los usos de cada fecha (CTE), y 2) promediar esas sumas por año.
+--   Un AVG(cantidad) directo sobre fact_usos promediaría filas (línea-día),
+--   no días, y daría un número sin sentido de negocio.
 -- Nota: el dataset arranca en enero de 2020, así que el "antes de la
 -- pandemia" son solo enero, febrero y la primera mitad de marzo de 2020.
 -- ---------------------------------------------------------------------
@@ -59,7 +59,7 @@ ORDER BY anio;
 -- P2. ¿Cómo se reparte la demanda entre colectivo, tren y subte, y cómo cambió?
 -- Para quién: inversión en infraestructura.
 -- Técnica: función de ventana  SUM(...) OVER (PARTITION BY ...)  para el % del total.
--- Pista: usos por año y modo; después
+-- Enfoque: usos por año y modo; el % sale de
 --   100.0 * usos / SUM(usos) OVER (PARTITION BY anio)
 -- ---------------------------------------------------------------------
 
@@ -92,9 +92,9 @@ ORDER BY anio, usos DESC;
 --     comparado con un día hábil?
 -- Para quién: armado de frecuencias y cronogramas.
 -- Técnica: CTE + agregación por categoría + comparación contra una base.
--- Pista: promedio de usos diarios por tipo_dia (AMBA, 2023–2025).
---   Para el % vs hábil podés usar una subconsulta escalar o
---   MAX(CASE WHEN tipo_dia = 'Hábil' THEN prom END) OVER ()
+-- Enfoque: promedio de usos diarios por tipo_dia (AMBA, 2023–2025). El día
+--   hábil se toma como base con MAX(CASE WHEN tipo_dia = 'Hábil' ...) OVER (),
+--   que evita una subconsulta escalar.
 -- ---------------------------------------------------------------------
 
 WITH por_dia AS (
@@ -134,8 +134,8 @@ ORDER BY promedio_diario DESC;
 -- P4. ¿Qué líneas de colectivo concentran la demanda? (análisis de Pareto)
 -- Para quién: control de subsidios y prioridades de fiscalización.
 -- Técnica: ventana con acumulado  SUM(...) OVER (ORDER BY ... ROWS UNBOUNDED PRECEDING).
--- Pista: usos por linea_canonica en 2025 (colectivos del AMBA), ordenados de mayor a menor;
---   calculá el % acumulado. ¿Cuántas líneas hacen el 50% de los viajes? ¿Y el 80%?
+-- Enfoque: usos por linea_canonica en 2025 (colectivos del AMBA), de mayor a
+--   menor, con el % acumulado. Se identifica cuántas líneas llegan al 50% y al 80%.
 -- ---------------------------------------------------------------------
 
 WITH por_linea AS (
@@ -171,7 +171,7 @@ ORDER BY ranking;
 -- Hallazgo: la demanda está MENOS concentrada que la regla 80/20: hace falta
 -- casi la mitad de las líneas para llegar al 80% de los viajes. No hay un
 -- puñado de líneas "críticas"; la red depende de muchas líneas medianas.
--- Ojo: la "501G (Moreno)" probablemente agrupa varios ramales informados juntos.
+-- Nota: la "501G (Moreno)" probablemente agrupa varios ramales informados juntos.
 
 
 -- ---------------------------------------------------------------------
@@ -179,8 +179,8 @@ ORDER BY ranking;
 --     mes del año anterior?
 -- Para quién: el área tarifaria (el subte tuvo fuertes aumentos en 2024).
 -- Técnica: LAG() para la variación interanual.
--- Pista: promedio diario por mes (inicio_mes) para modo = 'SUBTE';
---   LAG(prom, 12) OVER (ORDER BY inicio_mes) te da el mismo mes del año anterior.
+-- Enfoque: promedio por día hábil de cada mes (inicio_mes) para el subte;
+--   LAG(prom, 12) OVER (ORDER BY inicio_mes) trae el mismo mes del año anterior.
 -- ---------------------------------------------------------------------
 
 WITH por_dia AS (
@@ -204,16 +204,16 @@ SELECT inicio_mes,
        ROUND(100.0 * prom_diario / LAG(prom_diario, 12) OVER (ORDER BY inicio_mes) - 100, 1) AS var_interanual_pct
 FROM por_mes
 ORDER BY inicio_mes;
--- Ojo: el LAG se calcula ANTES de cualquier WHERE sobre el resultado. Si
--- filtraras inicio_mes >= '2023-01-01' en por_mes, los primeros 12 meses
--- quedarían sin comparación. Por eso el filtro, si lo querés, va afuera.
+-- Nota: el LAG necesita ver la serie completa. Un filtro de fechas dentro de
+-- por_mes dejaría los primeros 12 meses sin comparación; si hace falta
+-- recortar el período, el filtro va en una consulta externa.
 
 -- Resultado (promedio de usos del subte por día hábil, meses seleccionados):
 --   oct-2023: 915.021 | oct-2024: 671.163 (-26,7%) | oct-2025: 499.923 (-25,5%) | oct-2026: 460.667 (-7,9%)
 --   abr-2024 fue el último mes con crecimiento interanual (+5,2%).
 --   De jun-2024 a dic-2025, todos los meses caen entre 14% y 40% contra el año
 --   anterior; el peor fue abr-2025 (-40,0%).
--- Hallazgo: el subte perdió la mitad de sus pasajeros de día hábil en dos años
+-- Hallazgo: el subte perdió el 45% de sus pasajeros de día hábil en dos años
 -- (915 mil en oct-2023 -> 500 mil en oct-2025). La caída empieza a mediados
 -- de 2024 y en 2026 se modera (de -16% en febrero a -8% en octubre): la demanda
 -- parece estar tocando un piso.
@@ -232,10 +232,10 @@ ORDER BY inicio_mes;
 -- P6. ¿Qué días hábiles tuvieron caídas anómalas y por qué?
 -- Para quién: medir el impacto de paros y eventos.
 -- Técnica: ventana con promedio móvil  AVG(...) OVER (ORDER BY fecha ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING).
--- Pista: compará cada día hábil con el promedio de los 7 días hábiles anteriores.
---   Listá los 10 peores y buscá en las noticias qué pasó (paros generales,
---   paros de la UTA, cortes de servicio). Ya hay una versión simple al final
---   de 04_controles_calidad.sql: mejorala.
+-- Enfoque: cada día hábil se compara con el promedio de los 7 días hábiles
+--   anteriores. Se excluyen el 24 y el 31 de diciembre (caen ~50% todos los
+--   años) y el inicio de la cuarentena. La causa de cada caída se verificó en
+--   medios de prensa. Amplía el control simple de 04_controles_calidad.sql.
 -- ---------------------------------------------------------------------
 
 WITH por_dia AS (
@@ -296,8 +296,8 @@ LIMIT 12;
 -- Para quién: evaluación de una política pública.
 -- Técnica: filtrar con subconsulta (líneas con algún nombre que empiece con 'CABA_')
 --   y comparar períodos equivalentes (feb–oct 2024 vs feb–oct 2025).
--- Pista: compará contra el resto de los colectivos del AMBA en el mismo período,
---   porque si TODO bajó, la baja no se explica por el traspaso.
+-- Enfoque: se compara contra el resto de los colectivos del AMBA en el mismo
+--   período (grupo de control): si todo bajó, la baja no se explica por el traspaso.
 -- ---------------------------------------------------------------------
 
 WITH lineas_traspasadas AS (
