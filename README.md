@@ -2,7 +2,7 @@
 
 **El AMBA viaja un 22% menos que en 2023, y el subte perdió el 45% de sus pasajeros de día hábil en dos años, después del aumento de tarifa de mayo de 2024.**
 
-Análisis de los registros diarios de SUBE del Ministerio de Transporte, de punta a punta: carga y limpieza en PostgreSQL, modelo en estrella, preguntas de negocio en SQL y dashboard en Power BI.
+Análisis de los registros diarios de SUBE del Ministerio de Transporte, de punta a punta: carga y limpieza en PostgreSQL, modelo en estrella, preguntas de negocio en SQL y dashboard en Power BI. El pipeline también está replicado en PySpark para Databricks.
 
 ![Resumen](dashboard/01_resumen.png)
 
@@ -71,6 +71,7 @@ CSV (7 archivos) ──► raw (texto crudo) ──► stg (limpio) ──► dw
 - **PostgreSQL:** carga, limpieza, modelado y 7 preguntas de negocio (CTEs, funciones de ventana como `LAG`, `SUM OVER`, promedios móviles, y comparación contra un grupo de control).
 - **Modelo en estrella:** `fact_usos` + `dim_fecha` (con feriados y tipo de día) + `dim_linea` + `dim_empresa`.
 - **Power BI:** modelo con relaciones, medidas DAX (promedio por día hábil, variación interanual con `SAMEPERIODLASTYEAR`, % del total) y 3 páginas.
+- **PySpark + Databricks:** el mismo pipeline en arquitectura de medallón (bronze → silver → gold) con tablas Delta. Una validación cruzada confirma que da exactamente los mismos resultados que PostgreSQL. Ver [spark/README.md](spark/README.md).
 
 ### El desafío de limpieza principal
 
@@ -94,6 +95,8 @@ El total de usos se verifica en cada etapa (crudo − descartado = modelo final)
 
 Ver [docs/instalacion_windows.md](docs/instalacion_windows.md). En resumen: instalar PostgreSQL, copiar los CSV en `data/raw/` y ejecutar `ejecutar_todo.bat`. Los archivos que usa Power BI están en `dashboard/datos/` (se regeneran con `sql/06_exportar_powerbi.sql`).
 
+Para la versión en Databricks Free Edition, ver [spark/README.md](spark/README.md).
+
 ## Estructura
 
 ```
@@ -109,6 +112,7 @@ sube-amba/
 │   ├── 04_controles_calidad.sql
 │   ├── 05_preguntas_negocio.sql
 │   └── 06_exportar_powerbi.sql
+├── spark/                       ← el mismo pipeline en PySpark para Databricks (bronze/silver/gold)
 ├── dashboard/
 │   ├── sube_amba.pbix
 │   ├── sube_amba.xlsx           ← el análisis en Excel (fórmulas + tabla dinámica)
