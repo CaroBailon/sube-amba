@@ -50,7 +50,7 @@ esquema_feriados = StructType([
 
 # COMMAND ----------
 
-# Control rápido: 3.221.807 filas de usos en 7 archivos y 140 feriados.
+# Control rápido: filas por archivo (3.235.523 con los datos al 07/11/2026) y 140 feriados.
 # rollup agrega una fila con el total de todos los archivos.
 display(spark.table("bronze_usos_sube").rollup("archivo_origen").count()
         .withColumn("archivo_origen", F.coalesce("archivo_origen", F.lit("TOTAL")))

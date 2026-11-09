@@ -171,9 +171,15 @@ display(p7)
 def valor(df, filtro, col):
     return df.filter(filtro).select(col).first()[0]
 
+# El archivo de 2026 se actualiza seguido. Para comparar con PostgreSQL, 2026 se
+# recalcula con el mismo corte que tenía ese análisis (30/10/2026).
+p1_2026_al_corte = (por_dia(amba.filter((F.col("tipo_dia") == "Hábil") & (F.col("anio") == 2026)
+                                        & (F.col("fecha") <= "2026-10-30")))
+                    .agg(F.round(F.avg("usos")).cast("long")).first()[0])
+
 esperado = [
     ("P1 · AMBA, promedio día hábil 2023", valor(p1, "anio = 2023", "promedio_diario"), 11_708_399),
-    ("P1 · AMBA, promedio día hábil 2026", valor(p1, "anio = 2026", "promedio_diario"), 9_132_417),
+    ("P1 · AMBA, promedio día hábil 2026 (hasta 30/10)", p1_2026_al_corte, 9_132_417),
     ("P2 · Colectivo, % de 2025", valor(p2, "anio = 2025 AND modo = 'COLECTIVO'", "pct_del_anio"), 85.5),
     ("P3 · Feriado vs día hábil (%)", valor(p3, "tipo_dia = 'Feriado'", "dif_vs_habil_pct"), -65.2),
     ("P4 · Líneas para el 80% de los viajes", lineas_80, 183),
