@@ -1,2 +1,3 @@
 data/raw/*.csv
 *.pbix.bak
+*.zip

@@ -122,4 +122,4 @@ sube-amba/
 ```
 
 ---
-Carolina Bailon Trujillo · [LinkedIn](https://www.linkedin.com/in/carolina-bailon-trujillo-18334a36b/) · bailontrujillocarolina@gmail.com
+Carolina Bailon Trujillo · [LinkedIn](https://www.linkedin.com/in/carolinabailontrujillo/) · bailontrujillocarolina@gmail.com
