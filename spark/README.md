@@ -44,6 +44,8 @@ La lógica es idéntica a la de PostgreSQL y lo demuestra el último notebook: r
 | P6 · Mayor caída (09/05/2024) | −95,2% | −95,2% |
 | P7 · Líneas traspasadas a CABA, variación | −1,7% | −1,7% |
 
+![Validación cruzada en Databricks: 9 de 9 indicadores OK](validacion_databricks.png)
+
 El archivo de 2026 se actualiza seguido: por eso 2026 se compara con el mismo corte que tenía el análisis en PostgreSQL (30/10/2026). Con todos los días disponibles, el promedio de 2026 es 9.130.504.
 
 Antes de correrlo en Databricks, los notebooks se probaron con Spark local en modo ANSI, sobre archivos con el formato crudo de SUBE: las 512 líneas del AMBA dieron la misma `linea_canonica` y los 997.666 totales por día y línea, los mismos valores que en PostgreSQL.
