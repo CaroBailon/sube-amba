@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # 05 · Preguntas de negocio en PySpark
-# MAGIC Las 7 preguntas de `sql/05_preguntas_negocio.sql`, resueltas con la API de DataFrames y funciones de ventana.
+# MAGIC Las 8 preguntas de `sql/05_preguntas_negocio.sql`, resueltas con la API de DataFrames y funciones de ventana.
 # MAGIC Al final, una **validación cruzada**: los resultados clave se comparan con los que dio el mismo análisis en PostgreSQL.
 # MAGIC
 # MAGIC Criterio general: 2026 llega hasta el 30/10, así que los años se comparan con promedios diarios, no con totales.
@@ -158,6 +158,32 @@ p7 = (por_dia(colectivos, "anio", "grupo")
       .withColumnRenamed("2024", "feb_oct_2024").withColumnRenamed("2025", "feb_oct_2025")
       .withColumn("var_pct", F.round(100 * F.col("feb_oct_2025") / F.col("feb_oct_2024") - 100, 1)))
 display(p7)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## P8. ¿La caída del subte fue pareja en todas las líneas?
+# MAGIC Promedio por día hábil de cada línea en octubre de 2023 y octubre de 2026. `pivot` pone los dos meses en columnas
+# MAGIC y `unionByName` agrega la fila de total.
+
+# COMMAND ----------
+
+meses = ["2023-10-01", "2026-10-01"]
+subte_linea = (por_dia(amba.filter((F.col("modo") == "SUBTE") & (F.col("tipo_dia") == "Hábil")
+                                   & F.col("inicio_mes").isin(*meses)),
+                       "linea_canonica", "inicio_mes")
+               .groupBy("linea_canonica").pivot("inicio_mes", meses).agg(F.avg("usos"))
+               .withColumnRenamed(meses[0], "oct_2023").withColumnRenamed(meses[1], "oct_2026"))
+
+total = subte_linea.agg(F.lit("TOTAL SUBTE").alias("linea_canonica"),
+                        F.sum("oct_2023").alias("oct_2023"), F.sum("oct_2026").alias("oct_2026"))
+
+p8 = (subte_linea.unionByName(total)
+      .withColumn("var_pct", F.round(100 * F.col("oct_2026") / F.col("oct_2023") - 100, 1))
+      .withColumn("oct_2023", F.round("oct_2023").cast("long"))
+      .withColumn("oct_2026", F.round("oct_2026").cast("long"))
+      .orderBy(F.col("linea_canonica") == "TOTAL SUBTE", "var_pct"))
+display(p8)
 
 # COMMAND ----------
 

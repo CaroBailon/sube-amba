@@ -12,6 +12,7 @@ Análisis de los registros diarios de SUBE del Ministerio de Transporte, de punt
 | --- | --- | --- |
 | 1 | **La demanda tocó su máximo en 2023 y cae desde entonces.** | 11,7 millones de viajes por día hábil en 2023 → 9,1 millones en 2026 (-22%). |
 | 2 | **El subte perdió el 45% de sus pasajeros.** La caída arranca con el aumento del 17/05/2024 ($125 → $574, +359%) y se profundiza durante un año. | 915.000 viajes por día hábil en oct-2023 → 500.000 en oct-2025. Peor mes: abr-2025 (-40% interanual). |
+| 2b | **La caída del subte no fue pareja entre líneas.** | Oct-2023 → oct-2026: la D, la A y la B perdieron más de la mitad de sus pasajeros (-55%, -53%, -53%); la H fue la que mejor se sostuvo (-37%). Total del subte: -50%. |
 | 3 | **El colectivo sostiene la red.** | 85% de los viajes. El subte bajó del 6,8% (2023) al 4,7% (2025). |
 | 4 | **Un feriado se comporta como un domingo, pero un "puente" no.** | Feriado -65% y domingo -68% vs. día hábil; día no laborable con fines turísticos, -47%. |
 | 5 | **Lo que define el impacto de un paro es si paran los colectivos.** | Paro general con colectivos (9/5/2024): -95% de viajes. Sin colectivos (10/4/2025): -47%. Una tormenta fuerte resta entre 35% y 38%. |
@@ -83,7 +84,7 @@ CSV (7 archivos) ──► raw (texto crudo) ──► stg (limpio) ──► dw
                                                           05_preguntas_negocio
 ```
 
-- **PostgreSQL:** carga, limpieza, modelado y 7 preguntas de negocio (CTEs, funciones de ventana como `LAG`, `SUM OVER`, promedios móviles, y comparación contra un grupo de control).
+- **PostgreSQL:** carga, limpieza, modelado y 8 preguntas de negocio (CTEs, funciones de ventana como `LAG`, `SUM OVER`, promedios móviles, y comparación contra un grupo de control).
 - **Modelo en estrella:** `fact_usos` + `dim_fecha` (con feriados y tipo de día) + `dim_linea` + `dim_empresa`.
 - **Power BI:** modelo con relaciones, medidas DAX (promedio por día hábil, variación interanual con `SAMEPERIODLASTYEAR`, % del total) y 3 páginas.
 - **PySpark + Databricks:** el mismo pipeline en arquitectura de medallón (bronze → silver → gold) con tablas Delta. Una validación cruzada confirma que da exactamente los mismos resultados que PostgreSQL. Ver [spark/README.md](spark/README.md).
@@ -105,6 +106,7 @@ El total de usos se verifica en cada etapa (crudo − descartado = modelo final)
 5. ¿Cómo evolucionó el subte y cuánto cambió contra el año anterior?
 6. ¿Qué días hábiles tuvieron caídas anómalas y por qué?
 7. ¿Cambió la demanda de las 31 líneas traspasadas a la Ciudad? *No: -1,7% contra -2,5% del resto en el mismo período.*
+8. ¿La caída del subte fue pareja en todas las líneas? *No: entre octubre de 2023 y octubre de 2026, la D, la A y la B cayeron más del 53%; la H, 37%.*
 
 ## Cómo reproducirlo
 

@@ -13,7 +13,7 @@ La lógica es idéntica a la de PostgreSQL y lo demuestra el último notebook: r
 | `02_silver_limpieza.py` | Silver | `02_limpiar.sql` | Tipa y normaliza; aparta las cantidades negativas en `silver_usos_descartados`. |
 | `03_gold_modelo_estrella.py` | Gold | `03_modelo_estrella.sql` | Arma `gold_dim_fecha`, `gold_dim_linea` (con `linea_canonica`), `gold_dim_empresa` y `gold_fact_usos`. |
 | `04_controles_calidad.py` | — | `04_controles_calidad.sql` | 8 controles; si alguno falla, el notebook se detiene. |
-| `05_preguntas_negocio.py` | — | `05_preguntas_negocio.sql` | Las 7 preguntas con funciones de ventana (`lag`, acumulados, promedio móvil, `pivot`) y la validación cruzada. |
+| `05_preguntas_negocio.py` | — | `05_preguntas_negocio.sql` | Las 8 preguntas con funciones de ventana (`lag`, acumulados, promedio móvil, `pivot`) y la validación cruzada. |
 
 ## Qué cambia respecto de PostgreSQL
 

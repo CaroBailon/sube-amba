@@ -1,6 +1,6 @@
 -- =====================================================================
 -- 05_preguntas_negocio.sql
--- Siete preguntas de negocio sobre la movilidad en el AMBA.
+-- Ocho preguntas de negocio sobre la movilidad en el AMBA.
 --
 -- Cada bloque tiene: la pregunta, a quién le sirve la respuesta, la
 -- técnica SQL usada, el enfoque, la consulta y debajo el resultado con
@@ -341,3 +341,56 @@ GROUP BY grupo;
 -- (incluso cayeron un poco menos). En el primer año, el traspaso no tuvo un
 -- efecto visible en la demanda. Técnica usada: comparar contra un grupo de
 -- control (diferencia en diferencias simple).
+
+
+-- ---------------------------------------------------------------------
+-- P8. ¿La caída del subte fue pareja en todas las líneas?
+-- Para quién: la operadora del subte (dónde concentrar frecuencias y
+--   recursos) y el área tarifaria.
+-- Técnica: agregación condicional con FILTER para poner dos meses en
+--   columnas, y una fila de total con GROUPING SETS.
+-- Enfoque: promedio por día hábil de cada línea en octubre de 2023 (antes del
+--   aumento) y en octubre de 2026 (último mes completo), y su variación.
+--   Octubre contra octubre evita mezclar efectos estacionales.
+-- ---------------------------------------------------------------------
+
+WITH por_dia AS (
+    SELECT l.linea_canonica, f.fecha, f.inicio_mes, SUM(u.cantidad) AS usos
+    FROM dw.fact_usos u
+    JOIN dw.dim_fecha f ON f.fecha = u.fecha
+    JOIN dw.dim_linea l ON l.linea_key = u.linea_key
+    WHERE l.es_amba
+      AND l.modo = 'SUBTE'
+      AND f.tipo_dia = 'Hábil'
+      AND f.inicio_mes IN ('2023-10-01', '2026-10-01')
+    GROUP BY l.linea_canonica, f.fecha, f.inicio_mes
+),
+por_linea AS (
+    SELECT linea_canonica, inicio_mes, AVG(usos) AS prom_diario
+    FROM por_dia
+    GROUP BY linea_canonica, inicio_mes
+)
+SELECT COALESCE(linea_canonica, 'TOTAL SUBTE') AS linea,
+       ROUND(SUM(prom_diario) FILTER (WHERE inicio_mes = '2023-10-01')) AS oct_2023,
+       ROUND(SUM(prom_diario) FILTER (WHERE inicio_mes = '2026-10-01')) AS oct_2026,
+       ROUND(100.0 * SUM(prom_diario) FILTER (WHERE inicio_mes = '2026-10-01')
+                   / SUM(prom_diario) FILTER (WHERE inicio_mes = '2023-10-01') - 100, 1) AS var_pct
+FROM por_linea
+GROUP BY GROUPING SETS ((linea_canonica), ())
+ORDER BY (linea_canonica IS NULL), var_pct;
+
+-- Resultado (promedio de usos por día hábil):
+--   Subte D    201.143 ->  90.658   -54,9%
+--   Subte A    187.108 ->  87.146   -53,4%
+--   Subte B    215.513 -> 100.986   -53,1%
+--   Subte C    132.922 ->  71.368   -46,3%
+--   Subte E     86.115 ->  47.578   -44,8%
+--   Subte H     90.614 ->  57.429   -36,6%
+--   Premetro     1.607 ->   5.501  +242,4%
+--   TOTAL SUBTE 915.021 -> 460.667  -49,7%
+-- Hallazgo: la caída no fue pareja. Las tres líneas más usadas (D, A y B)
+-- perdieron más de la mitad de sus pasajeros; la H fue la que mejor se
+-- sostuvo. El premetro mueve tan pocos pasajeros que su variación no es
+-- comparable con el resto.
+-- Pendiente: cruzar con cierres de estaciones o tramos por obras, que pueden
+-- explicar parte de las diferencias entre líneas.
