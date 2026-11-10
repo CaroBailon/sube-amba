@@ -52,6 +52,21 @@ Archivo: [`dashboard/sube_amba.pbix`](dashboard/sube_amba.pbix) · Versión en P
 ![El subte](dashboard/02_subte.png)
 ![Días atípicos](dashboard/03_dias_atipicos.png)
 
+### Diccionario de indicadores
+
+Todas las medidas DAX del modelo, con su fórmula y cómo leerlas.
+
+| Indicador | Fórmula DAX | Qué significa |
+| --- | --- | --- |
+| **Usos** | `SUM(fact_usos_amba[cantidad])` | Cantidad total de viajes pagos con SUBE en el período y filtro elegidos. Cuenta viajes, no personas: quien combina colectivo y tren suma dos. |
+| **Días con datos** | `DISTINCTCOUNT(fact_usos_amba[fecha])` | Cantidad de días con registros. Se usa como denominador de los promedios. |
+| **Promedio diario** | `DIVIDE([Usos], [Días con datos])` | Viajes por día. Permite comparar años completos con 2026, que está incompleto. |
+| **Promedio día hábil** | `CALCULATE([Promedio diario], dim_fecha[tipo_dia] = "Hábil")` | Viajes por día hábil, sin fines de semana ni feriados. Es el indicador principal porque el mix de días cambia de un año a otro. |
+| **Var. interanual %** | `VAR actual = [Promedio día hábil]`<br>`VAR anterior = CALCULATE([Promedio día hábil], SAMEPERIODLASTYEAR(dim_fecha[fecha]))`<br>`RETURN DIVIDE(actual - anterior, anterior)` | Cuánto cambió el promedio de día hábil contra el mismo período del año anterior. Ejemplo: -40% en abril de 2025 significa que el subte movió un 40% menos de viajes por día hábil que en abril de 2024. |
+| **% del total** | `DIVIDE([Usos], CALCULATE([Usos], ALL(dim_linea[modo])))` | Participación de cada modo (colectivo, tren, subte) sobre el total de viajes del período. |
+
+**Modelo en Power BI:** `fact_usos_amba` se relaciona con `dim_fecha` (por `fecha`) y con `dim_linea` (por `linea_key`), ambas relaciones muchos a uno con filtro en una dirección. `dias_atipicos` es una tabla de referencia con la causa de cada caída. La limpieza se hace toda en SQL, así que Power Query solo carga los CSV de `dashboard/datos/` y define los tipos de dato. De esta forma, las reglas de negocio quedan en un único lugar, versionado.
+
 ## Datos
 
 - **Fuente:** [SUBE – Cantidad de transacciones (usos) por fecha](https://datos.transporte.gob.ar/dataset/sube-cantidad-de-transacciones-usos-por-fecha), Ministerio de Transporte.
