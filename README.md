@@ -1,6 +1,6 @@
 # ¿Cómo se mueve el AMBA? 19.000 millones de viajes con SUBE (2020–2026)
 
-**El AMBA viaja un 22% menos que en 2023, y el subte perdió el 45% de sus pasajeros de día hábil en dos años, después del aumento de tarifa de mayo de 2024.**
+**El AMBA viaja un 22% menos que en 2023, y el subte perdió casi la mitad de sus pasajeros de día hábil en tres años (−50% entre octubre de 2023 y octubre de 2026), después del aumento de tarifa de mayo de 2024.**
 
 Análisis de los registros diarios de SUBE del Ministerio de Transporte, de punta a punta: carga y limpieza en PostgreSQL, modelo en estrella, preguntas de negocio en SQL y dashboard en Power BI. El pipeline también está replicado en PySpark para Databricks.
 
