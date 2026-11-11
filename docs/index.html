@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Movilidad en el AMBA con datos de SUBE · Carolina Bailon Trujillo</title>
+<meta name="description" content="Explorador interactivo de 19.000 millones de viajes con SUBE en el AMBA (2020–2026): evolución por modo, subte por línea, colectivos y días atípicos.">
+<meta property="og:title" content="Movilidad en el AMBA con datos de SUBE">
+<meta property="og:description" content="Explorá cómo cambiaron los viajes en colectivo, tren y subte entre 2020 y 2026.">
+<meta property="og:image" content="https://carobailon.github.io/sube-amba/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header class="cabecera">
+  <div class="contenedor">
+    <p class="volanta">Movilidad en el AMBA · Datos de SUBE</p>
+    <h1>¿Cómo cambió la forma de viajar en el AMBA?</h1>
+    <p class="bajada">Un explorador de los viajes registrados con la tarjeta SUBE entre 2020 y 2026. Elegí un modo, una línea o un día y mirá los datos por tu cuenta.</p>
+    <p class="autora">Por <strong>Carolina Bailon Trujillo</strong> ·
+      <a href="https://github.com/CaroBailon/sube-amba">Código y análisis completo</a> ·
+      <a href="https://www.linkedin.com/in/carolinabailontrujillo/">LinkedIn</a></p>
+  </div>
+</header>
+
+<nav class="indice" aria-label="Secciones">
+  <div class="contenedor">
+    <a href="#modos">Por modo</a>
+    <a href="#subte">Subte por línea</a>
+    <a href="#colectivos">Buscador de colectivos</a>
+    <a href="#atipicos">Días atípicos</a>
+    <a href="#datos">Sobre los datos</a>
+  </div>
+</nav>
+
+<main class="contenedor">
+
+  <section class="kpis" aria-label="Datos clave">
+    <div class="kpi"><span class="kpi-num" id="kpi-amba">—</span><span class="kpi-txt">viajes por día hábil en el AMBA, 2026 vs. 2023</span></div>
+    <div class="kpi"><span class="kpi-num naranja" id="kpi-subte">—</span><span class="kpi-txt">pasajeros del subte por día hábil, oct. 2026 vs. oct. 2023</span></div>
+    <div class="kpi"><span class="kpi-num" id="kpi-cole">—</span><span class="kpi-txt">de los viajes de 2025 fueron en colectivo</span></div>
+  </section>
+
+  <!-- 1. Por modo -->
+  <section id="modos" class="seccion">
+    <h2>Colectivo, tren y subte, mes a mes</h2>
+    <p class="explica">Promedio de viajes por día. Con <strong>índice</strong> los tres modos quedan en la misma escala (promedio de 2023 = 100), así se compara cuánto cambió cada uno aunque el colectivo mueva diez veces más gente.</p>
+    <div class="controles">
+      <label>Tipo de día
+        <select id="modos-tipo">
+          <option value="Hábil">Días hábiles</option>
+          <option value="Sábado">Sábados</option>
+          <option value="Domingo">Domingos</option>
+          <option value="Feriado">Feriados</option>
+          <option value="No laborable">Puentes (no laborables)</option>
+          <option value="Todos">Todos los días</option>
+        </select>
+      </label>
+      <fieldset class="grupo-botones">
+        <legend>Mostrar</legend>
+        <label><input type="radio" name="modos-medida" value="promedio" checked> Viajes por día</label>
+        <label><input type="radio" name="modos-medida" value="indice"> Índice (2023 = 100)</label>
+      </fieldset>
+      <fieldset class="grupo-botones" id="modos-check">
+        <legend>Modos</legend>
+      </fieldset>
+    </div>
+    <div class="grafico"><canvas id="graf-modos" role="img" aria-label="Viajes promedio por día según modo de transporte, por mes"></canvas></div>
+    <p class="nota" id="modos-nota"></p>
+  </section>
+
+  <!-- 2. Subte por línea -->
+  <section id="subte" class="seccion">
+    <h2>¿La caída del subte fue pareja en todas las líneas?</h2>
+    <p class="explica">Promedio de viajes por día hábil de cada línea. La línea punteada marca el aumento de tarifa del 17 de mayo de 2024 ($125 → $574).</p>
+    <div class="controles">
+      <fieldset class="grupo-botones" id="subte-check">
+        <legend>Líneas</legend>
+      </fieldset>
+      <fieldset class="grupo-botones">
+        <legend>Mostrar</legend>
+        <label><input type="radio" name="subte-medida" value="promedio" checked> Viajes por día hábil</label>
+        <label><input type="radio" name="subte-medida" value="indice"> Índice (oct. 2023 = 100)</label>
+      </fieldset>
+    </div>
+    <div class="grafico"><canvas id="graf-subte" role="img" aria-label="Viajes por día hábil en cada línea de subte, por mes"></canvas></div>
+    <div class="tabla-scroll">
+      <table class="tabla" id="subte-tabla">
+        <caption>Octubre de 2023 contra octubre de 2026, de mayor a menor caída</caption>
+        <thead><tr><th scope="col">Línea</th><th scope="col" class="num">Oct. 2023</th><th scope="col" class="num">Oct. 2026</th><th scope="col" class="num">Variación</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="nota">La línea D estuvo cerrada por obras de modernización entre el 8 de enero y el 7 de marzo de 2024: por eso cae a cero. El premetro mueve tan pocos pasajeros que su variación no es comparable con la del resto.</p>
+  </section>
+
+  <!-- 3. Colectivos -->
+  <section id="colectivos" class="seccion">
+    <h2>Buscá tu línea de colectivo</h2>
+    <p class="explica">Escribí el número de una línea. La comparación con el total usa índices (promedio de 2023 = 100): si la línea queda por encima del total, perdió menos pasajeros que el promedio.</p>
+    <div class="controles">
+      <label>Línea
+        <input id="cole-busca" list="cole-lista" placeholder="Ej.: 60" autocomplete="off">
+        <datalist id="cole-lista"></datalist>
+      </label>
+      <fieldset class="grupo-botones">
+        <legend>Mostrar</legend>
+        <label><input type="radio" name="cole-medida" value="indice" checked> Contra el total (índice)</label>
+        <label><input type="radio" name="cole-medida" value="promedio"> Viajes por día hábil</label>
+      </fieldset>
+    </div>
+    <p class="aviso" id="cole-aviso" role="status"></p>
+    <div class="ficha" id="cole-ficha"></div>
+    <div class="grafico"><canvas id="graf-cole" role="img" aria-label="Viajes por día hábil de la línea elegida, comparados con el total de colectivos"></canvas></div>
+    <p class="nota">Algunas líneas se informan agrupadas (por ejemplo, la 501G de Moreno), lo que exagera su tamaño. Las líneas municipales llevan el nombre del municipio, porque los números se repiten entre municipios.</p>
+  </section>
+
+  <!-- 4. Días atípicos -->
+  <section id="atipicos" class="seccion">
+    <h2>Los días que se frenó el AMBA</h2>
+    <p class="explica">Los 12 días hábiles con mayor caída contra el promedio de los 7 días hábiles anteriores. Elegí uno para ver qué pasó con los colectivos y con el tren y el subte esa semana.</p>
+    <div class="dos-columnas">
+      <div class="tabla-scroll">
+        <table class="tabla tabla-eventos" id="atip-tabla">
+          <thead><tr><th scope="col">Fecha</th><th scope="col">Evento</th><th scope="col" class="num">Caída</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <p class="detalle" id="atip-detalle" aria-live="polite"></p>
+        <div class="grafico grafico-bajo"><canvas id="graf-atip" role="img" aria-label="Viajes diarios alrededor del día elegido, separados en colectivo y tren más subte"></canvas></div>
+        <p class="nota">Barras claras: fines de semana y feriados.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre los datos -->
+  <section id="datos" class="seccion sobre">
+    <h2>Sobre los datos</h2>
+    <ul>
+      <li><strong>Fuente:</strong> <span id="meta-fuente"></span></li>
+      <li><strong>Período:</strong> <span id="meta-periodo"></span>. Página generada el <span id="meta-generado"></span>.</li>
+      <li><strong>Qué es un viaje:</strong> cada uso registrado con la tarjeta. Una persona que combina colectivo y tren cuenta dos veces, y los viajes gratuitos o sin validar no aparecen.</li>
+      <li><strong>Promedio por día:</strong> viajes del mes en ese tipo de día ÷ cantidad de días de ese tipo según el calendario. Por eso se pueden comparar meses y años incompletos.</li>
+      <li><strong>Causas:</strong> las caídas coinciden en el tiempo con los hechos que se mencionan, pero el dato por sí solo no prueba la causa.</li>
+    </ul>
+    <p>Limpieza, modelo y validación en <a href="https://github.com/CaroBailon/sube-amba">github.com/CaroBailon/sube-amba</a> (PostgreSQL, PySpark sobre Databricks, Power BI y Excel).</p>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <div class="contenedor">Carolina Bailon Trujillo · Data Analyst / Data Scientist Jr · Ciencia de Datos en Organizaciones (UNLP)</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

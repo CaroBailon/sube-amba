@@ -4,6 +4,8 @@
 
 Análisis de los registros diarios de SUBE del Ministerio de Transporte, de punta a punta: carga y limpieza en PostgreSQL, modelo en estrella, preguntas de negocio en SQL y dashboard en Power BI. El pipeline también está replicado en PySpark para Databricks.
 
+**🔎 Explorá los datos vos:** [carobailon.github.io/sube-amba](https://carobailon.github.io/sube-amba/). Evolución por modo, el subte por línea, un buscador de colectivos y los días atípicos, sin instalar nada. Cómo está hecha y por qué: [web/README.md](web/README.md).
+
 ![Resumen](dashboard/01_resumen.png)
 
 ## Hallazgos
@@ -135,7 +137,12 @@ sube-amba/
 │   ├── sube_amba.xlsx           ← el análisis en Excel (fórmulas + tabla dinámica)
 │   ├── 01_resumen.png, 02_subte.png, 03_dias_atipicos.png
 │   └── datos/                   ← CSV que usa Power BI (solo AMBA)
-├── docs/
+├── web/
+│   ├── exportar_datos.py        ← genera los JSON de la página desde dashboard/datos/
+│   └── README.md                ← decisiones de diseño de la página
+├── docs/                        ← lo que publica GitHub Pages
+│   ├── index.html, app.js, estilos.css   ← la página interactiva
+│   ├── data/                    ← datos agregados para la página (≈340 KB)
 │   ├── decisiones_de_limpieza.md
 │   ├── instalacion_windows.md
 │   └── sube_amba.pdf            ← el dashboard exportado a PDF
