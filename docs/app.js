@@ -194,7 +194,7 @@ async function iniciar() {
     return i;
   }
 
-  function dibujarCole() {
+  function dibujarCole(actualizarUrl = true) {
     const i = encontrar(busca.value);
     const aviso = document.getElementById("cole-aviso");
     if (i < 0) {
@@ -220,16 +220,17 @@ async function iniciar() {
     grafCole.data.datasets = sets;
     grafCole.options = opcionesLinea({ indice });
     grafCole.update();
-    history.replaceState(null, "", `?linea=${encodeURIComponent(linea.nombre)}#colectivos`);
+    // Solo cuando la persona busca una línea: así el link de la portada queda limpio
+    if (actualizarUrl) history.replaceState(null, "", `?linea=${encodeURIComponent(linea.nombre)}#colectivos`);
   }
-  busca.addEventListener("input", dibujarCole);
-  busca.addEventListener("change", dibujarCole);
-  document.querySelectorAll('input[name="cole-medida"]').forEach((r) => r.addEventListener("change", dibujarCole));
+  busca.addEventListener("input", () => dibujarCole());
+  busca.addEventListener("change", () => dibujarCole());
+  document.querySelectorAll('input[name="cole-medida"]').forEach((r) => r.addEventListener("change", () => dibujarCole()));
   const inicial = new URLSearchParams(location.search).get("linea");
   // Por defecto, una línea conocida y no agrupada (la 501G figura primera solo porque se informa agrupada)
   const porDefecto = cole.lineas.find((l) => l.nombre === "Línea 60") || cole.lineas[0];
   busca.value = inicial || porDefecto.nombre;
-  dibujarCole();
+  dibujarCole(false);
 
   // ---- 4. Días atípicos ----
   const grafAtip = new Chart(document.getElementById("graf-atip"), {
